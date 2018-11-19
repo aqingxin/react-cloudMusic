@@ -53,10 +53,10 @@ class Play extends Component {
   }
  
   getLrc(lrcUrl){   //获取歌词
-    // console.log(lrcUrl)
+    // console.log(lrcUrl)    //歌词数据只能以text形式返回
     fetch(lrcUrl).then((res)=>res.text())
     .then((Response)=>{
-      // console.log(Response)
+      console.log(Response)
       this.changeLrc(Response)
     })
     .catch((err)=>{
@@ -64,32 +64,30 @@ class Play extends Component {
     })
   }
   changeLrc(lrc){   //对歌词与事件进行格式
-    var lyrics=lrc.split('\n'); 
+    var lyrics=lrc.split('\n');    //通过歌词的换行转换为数组
     var lrcObj=[];
     var timeReg=/\[\d*:\d*((\.|\:)\d*)*\]/g;
     for(var i=0;i<lyrics.length;i++){
-      var timeRegExpArr=lyrics[i].match(timeReg);
+      var timeRegExpArr=lyrics[i].match(timeReg);   //匹配出歌词的时间
       if(!timeRegExpArr) continue;
-      var txt=lyrics[i].replace(timeReg,'');
+      var txt=lyrics[i].replace(timeReg,'');  //匹配出歌词文本
       for(var k=0;k<timeRegExpArr.length;k++){
           var array={};
           var t=timeRegExpArr[k];
-          var min=Number(String(t.match(/\[\d*/i)).slice(1)),
+          var min=Number(String(t.match(/\[\d*/i)).slice(1)),   //将时间的分钟和秒数进行切割
               sec = Number(String(t.match(/\:\d*/i)).slice(1));
-          var time=min * 60 + sec
+          var time=min * 60 + sec   //最终转换为秒数
           array.time=time;
           array.txt=txt;
           lrcObj.push(array);
       }
-      // console.log(lrcObj)
     }
     this.setState({
       lyric:lrcObj
     })
-    // console.log(lrcObj)
   }
   songUrl(id){   //audio的播放地址
-    return `https://api.bzqll.com/music/netease/url?key=579621905&id=${id}&br=999000`
+    return `https://api.bzqll.com/music/netease/url?key=579621905&id=${id}&br=999000`;
   }
 
   switchPlay(){   //切换audio的播放状态
@@ -118,7 +116,6 @@ class Play extends Component {
   }
 
   render(){
-
     var bgImg={
       backgroundImage:'url('+this.state.playInfo.pic+')'
     }
@@ -129,7 +126,6 @@ class Play extends Component {
         <div className="playBg" style={bgImg}></div>
         <div>
           <Disc onChangeState={this.switchPlay} discImg={this.state.playInfo.pic} isPlay={this.state.isPlay} />
-      
           <Lyric songName={this.state.playInfo.name} singer={this.state.playInfo.singer} lyric={this.state.lyric} currentIndex={this.lrcTranslate(this.state.lyric)}/>
           <div className="bottomBtn">
             <div className="openBtn">打开</div>
