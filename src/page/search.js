@@ -18,6 +18,7 @@ class Search extends Component{
     this.search=this.search.bind(this);
     this.clickSearch=this.clickSearch.bind(this);
     this.hisotyClick=this.hisotyClick.bind(this);
+    this.storeStorage=this.storeStorage.bind(this);
   }
   componentDidMount(){
     if(localStorage.getItem('history')!==null){  //获取本地存储的历史搜索记录
@@ -40,26 +41,43 @@ class Search extends Component{
   }
   onSearch(e){   //回车进行搜索
     if(e.which===13){
+      this.storeStorage(this.state.searchValue)
       this.search();
     }
   }
   clickSearch(index){   //点击热门搜索的数据进行搜索
-    let tmp=this.state.localStorageData;
-    if(tmp.indexOf(this.state.hotSongList[index])>-1){   //判断搜索历史里是否有该值，如果就把它移到第一位
-      tmp.splice(tmp.indexOf(this.state.hotSongList[index]),1)
-      tmp.unshift(this.state.hotSongList[index]);
-    }else{   //如果没有，就直接从头部插入
-      tmp.unshift(this.state.hotSongList[index]);
-    }
+    // let tmp=this.state.localStorageData;
+    // if(tmp.indexOf(this.state.hotSongList[index])>-1){   //判断搜索历史里是否有该值，如果就把它移到第一位
+    //   tmp.splice(tmp.indexOf(this.state.hotSongList[index]),1)
+    //   tmp.unshift(this.state.hotSongList[index]);
+    // }else{   //如果没有，就直接从头部插入
+    //   tmp.unshift(this.state.hotSongList[index]);
+    // }
+    // this.setState({
+    //   searchValue:this.state.hotSongList[index],
+    //   localStorageData:tmp
+    // })
+    // localStorage.setItem('history',JSON.stringify(this.state.localStorageData));
+    this.storeStorage(this.state.hotSongList[index])
     this.setState({
       searchValue:this.state.hotSongList[index],
-      localStorageData:tmp
     })
-    localStorage.setItem('history',JSON.stringify(this.state.localStorageData));
-
     setTimeout(()=>{
       this.search()
     },0)
+  }
+  storeStorage(content){   //对搜索的内容进行存进本地存储，作为历史搜索记录
+    let tmpStorage=this.state.localStorageData;
+    if(tmpStorage.indexOf(content)>-1){   //判断本地存储有无该条数据，如果有就移动数组地位
+      tmpStorage.splice(tmpStorage.indexOf(content),1);
+      tmpStorage.unshift(content);
+    }else{    //如果没有就直接存进数组头部
+      tmpStorage.unshift(content);
+    }
+    this.setState({
+      localStorageData:tmpStorage
+    })
+    localStorage.setItem('history',JSON.stringify(this.state.localStorageData));
   }
   deleteHistory(e,index){    //删除历史搜素记录
     // console.log(e)
@@ -72,11 +90,11 @@ class Search extends Component{
     })
     localStorage.setItem('history',JSON.stringify(this.state.localStorageData));
   }
-  hisotyClick(item){
-    console.log(item)
+  hisotyClick(item){  //点击历史搜索记录进行搜素
     this.setState({
       searchValue:item
     })
+    this.storeStorage(item)
     setTimeout(()=>{
       this.search()
     },0)
@@ -86,7 +104,8 @@ class Search extends Component{
       LoadingGif:true,
       searchFlag:true
     })
-    fetch(`https://api.bzqll.com/music/netease/search?key=579621905&s=${this.state.searchValue}&limit=20&offset=0`).then((res)=>res.json()).then((Response)=>{
+    fetch(`https://api.bzqll.com/music/netease/search?key=579621905&s=${this.state.searchValue}&limit=20&offset=0`).then((res)=>res.json())
+    .then((Response)=>{
       this.setState({
         searchResult:Response.data,
         LoadingGif:false

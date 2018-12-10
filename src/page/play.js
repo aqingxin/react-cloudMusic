@@ -33,6 +33,7 @@ class Play extends Component {
       console.log(err)
     })
     
+    
     const music=this.refs.music;   //改变audio的播放状态
     music.addEventListener('loadeddata',()=>{
       this.setState({
@@ -43,9 +44,9 @@ class Play extends Component {
   }
   audioTimeUp(){   //获取audio当前播放的时间
     let timeNow=parseInt(this.refs.music.currentTime);
-      this.setState({
-        currentTime:timeNow
-      })
+    this.setState({
+      currentTime:timeNow
+    })
   }
   componentWillUnmount(){   //离开页面时移除audio的监听事件
     const music=this.refs.music;
@@ -56,7 +57,7 @@ class Play extends Component {
     // console.log(lrcUrl)    //歌词数据只能以text形式返回
     fetch(lrcUrl).then((res)=>res.text())
     .then((Response)=>{
-      console.log(Response)
+      
       this.changeLrc(Response)
     })
     .catch((err)=>{
@@ -125,8 +126,17 @@ class Play extends Component {
         <audio src={this.songUrl(this.props.match.params.id)} ref='music' autoPlay="autoplay"></audio>
         <div className="playBg" style={bgImg}></div>
         <div>
-          <Disc onChangeState={this.switchPlay} discImg={this.state.playInfo.pic} isPlay={this.state.isPlay} />
-          <Lyric songName={this.state.playInfo.name} singer={this.state.playInfo.singer} lyric={this.state.lyric} currentIndex={this.lrcTranslate(this.state.lyric)}/>
+          <Disc 
+            onChangeState={this.switchPlay} 
+            discImg={this.state.playInfo.pic} 
+            isPlay={this.state.isPlay} 
+          />
+          <Lyric 
+            songName={this.state.playInfo.name} 
+            singer={this.state.playInfo.singer} 
+            lyric={this.state.lyric} 
+            currentIndex={this.lrcTranslate(this.state.lyric)}
+          />
           <div className="bottomBtn">
             <div className="openBtn">打开</div>
             <div className="downloadBtn">下载</div>

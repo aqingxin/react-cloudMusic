@@ -26,15 +26,16 @@ class ListItem extends Component{
   }
   render(){
     if(this.state.jump){
-      return <Redirect to={{path:'/play',state:{"id":this.props.songInfo.id}}} />;
+      return <Redirect to={{path:'/play',state:{"id":this.props.songInfo.id}}} />;   //重定向  跳路由
     }
+    let itemIndex=this._reactInternalFiber.key*1+1<10?'0'+(this._reactInternalFiber.key*1+1):this._reactInternalFiber.key*1+1;  //列表的index
     return (
       <li className={['newSongItem',this.props.type==='newSong'?'':'hotSongItem'].join(' ')} onClick={this.jumpRouter}>
       <Link to={'/play/'+this.props.songInfo.id}>
         <span className="itemIndex">
           {
             this.props.type==='hotSong'&&
-            this._reactInternalFiber.key*1+1
+            itemIndex
           }
         </span>
         <div>{this.props.songInfo.name}</div>

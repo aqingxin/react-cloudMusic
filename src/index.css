@@ -103,6 +103,7 @@ body,html{
   box-sizing: border-box;
 }
 .sheetItemImg {
+  position: relative;
   width: 100%;
   height: 100%;
 }
@@ -213,7 +214,7 @@ body,html{
   display: block;
   font-size: 16px;
 }
-.hotSongItem:first-child>.itemIndex,.hotSongItem:nth-child(2)>.itemIndex,.hotSongItem:nth-child(3)>.itemIndex{
+.hotSongItem:first-child span.itemIndex,.hotSongItem:nth-child(2) .itemIndex,.hotSongItem:nth-child(3) .itemIndex{
   color: #d43c33;
 }
 .searchBox {
@@ -405,7 +406,6 @@ body,html{
   background-size: contain;
 }
 .isPlay {
-  
   animation-play-state:running;
 }
 .pause {
@@ -451,9 +451,7 @@ body,html{
 .current {
   color: #fff;
 }
-/* .songSheetDetail {
 
-} */
 .sheetHead {
   position: relative;
   padding: 30px 10px 30px 15px;
@@ -514,8 +512,8 @@ body,html{
   background-position: 0;
   background-repeat: no-repeat;
   background-size: 11px 10px;
-  background-image: url(./asset//images/playCount.png)
-
+  background-image: url(./asset//images/playCount.png);
+  font-style: normal;
 }
 .sheetWrapLeft::after {
   content: " ";
@@ -636,6 +634,10 @@ body,html{
   background: #d33a31;
   color: #fff;
   margin-left: 10px;
+}
+.comment {
+  width: 100%;
+  height: 800px;
 }
 @keyframes circling {
   from {transform: rotate(0deg)}
